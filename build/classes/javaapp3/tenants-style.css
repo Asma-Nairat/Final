@@ -1,0 +1,165 @@
+/* ============================================== */
+/* ===       Global Styles & Main Buttons     === */
+/* ============================================== */
+
+/* لتغيير لون الخلفية الرئيسي للتطبيق */
+.root {
+    -fx-background-color: #f4f4f4;
+}
+
+/* تنسيق زر الإضافة الرئيسي (Add Tenant / Add Apartment) */
+.add-button {
+    -fx-background-color: #000080; /* لون أزرق غامق */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand; /* تغيير شكل المؤشر */
+}
+.add-button:hover {
+    -fx-background-color: #0000B0; /* لون أفتح عند التأشير */
+}
+
+
+/* ============================================== */
+/* ===           Sidebar Styles               === */
+/* ============================================== */
+
+.sidebar {
+    -fx-background-color: #383838; /* رمادي داكن */
+}
+
+.sidebar-title {
+    -fx-background-color: #000080; /* أزرق غامق */
+    -fx-text-fill: white;
+}
+
+/* الأزرار العادية في القائمة الجانبية */
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 20px;
+    -fx-cursor: hand;
+}
+.sidebar-button:hover {
+    -fx-background-color: #555555; /* لون أغمق قليلاً عند التأشير */
+}
+
+/* الزر النشط/المحدد في القائمة الجانبية */
+.sidebar-button-selected {
+    -fx-background-color: #0000B0; /* أزرق أفتح */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 20px;
+    -fx-border-color: white transparent transparent transparent;
+    -fx-border-width: 2;
+}
+
+
+/* ============================================== */
+/* ===            TableView Styles            === */
+/* ============================================== */
+
+/* إزالة الحدود الخارجية للجدول */
+.table-view {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+}
+
+/* تنسيق خلفية رؤوس الأعمدة */
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+/* تنسيق رؤوس الأعمدة نفسها (النص) */
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: white; /* خلفية بيضاء */
+    -fx-border-color: transparent transparent #E0E0E0 transparent; /* خط سفلي رمادي خفيف */
+    -fx-font-size: 12px;
+    -fx-text-transform: uppercase; /* جعل النص بأحرف كبيرة */
+    -fx-text-fill: #808080; /* لون رمادي للنص */
+    -fx-padding: 10px;
+}
+
+/* تنسيق خلايا الجدول */
+.table-cell {
+    -fx-border-color: transparent transparent #F0F0F0 transparent; /* خط فاصل خفيف جداً بين الصفوف */
+    -fx-padding: 15px;
+    -fx-font-size: 14px;
+}
+
+/* تنسيق زر "Details" داخل الجدول */
+.details-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #000080; /* لون أزرق غامق */
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+.details-button:hover {
+    -fx-underline: true; /* وضع خط تحت النص عند التأشير */
+}
+
+/* إزالة لون التحديد الأزرق الافتراضي عند الضغط على صف */
+.table-row-cell:selected {
+    -fx-background-color: #E8F0FE; /* لون أزرق فاتح جدًا للتحديد */
+    -fx-text-background-color: black;
+}
+/* ============================================== */
+/* ===       Add/Edit Form Styles           === */
+/* ============================================== */
+
+/* تنسيق الحاوية الرئيسية للفورم */
+.form-container {
+    -fx-background-color: #f4f4f4;
+    -fx-padding: 20px;
+}
+
+/* تنسيق عنوان الفورم (e.g., "Add New Tenant") */
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* تنسيق الشبكة التي تحتوي على الليبلات والحقول */
+.form-grid {
+    -fx-hgap: 10px;
+    -fx-vgap: 15px;
+}
+
+/* تنسيق الليبلات (e.g., "Full Name *") */
+.form-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* تنسيق حقول إدخال النص */
+.text-field, .combo-box, .text-area {
+    -fx-font-size: 14px;
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+/* تغيير لون الحدود عند التركيز على الحقل */
+.text-field:focused, .combo-box:focused, .text-area:focused {
+    -fx-border-color: #000080; /* أزرق غامق */
+}
+
+/* تنسيق زر الإلغاء */
+.cancel-button {
+    -fx-background-color: #A9A9A9; /* رمادي */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15 8 15;
+    -fx-cursor: hand;
+}
+.cancel-button:hover {
+    -fx-background-color: #808080; /* أغمق قليلاً */
+}

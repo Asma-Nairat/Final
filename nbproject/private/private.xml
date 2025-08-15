@@ -3,8 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/TenantsView.fxml</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/tenants-style.css</file>
             <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/ApartmentsView.fxml</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/TenantDetailsController.java</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/TenantsViewController.java</file>
             <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/ApartmentDetailsController.java</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/RecordPaymentController.java</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/ApartmentsViewController.java</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/AddTenantController.java</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/TenantDetailsView.fxml</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/AddTenantView.fxml</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/JavaApp3.java</file>
+            <file>file:/C:/Users/HP/OneDrive/المستندات/NetBeansProjects/JavaApp3/src/javaapp3/RecordPaymentView.fxml</file>
         </group>
     </open-files>
 </project-private>

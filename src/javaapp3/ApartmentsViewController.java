@@ -352,8 +352,24 @@ private void openEditView(String name, String location, VBox apartmentCard) {
     }
 }
     
+// هذه الدالة يجب أن تكون موجودة في ApartmentsViewController.java
+
+@FXML
+private void handleGoToTenants(ActionEvent event) throws IOException {
+    // طباعة للتأكد من أن الزر يعمل
+    System.out.println("Switching to Tenants View...");
     
+    // الحصول على النافذة الحالية
+    Stage stage = (Stage) ((Button)event.getSource()).getScene().getWindow();
     
+    // تحميل الواجهة الجديدة
+    Parent root = FXMLLoader.load(getClass().getResource("TenantsView.fxml"));
+    
+    // استبدال المشهد الحالي بالمشهد الجديد
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+} 
     
     
 }
