@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.javaapp3</groupId>
-    <artifactId>JavaApp3</artifactId>
+    <artifactId>JavaApp3</artifactId> 
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+ 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>22</maven.compiler.source>

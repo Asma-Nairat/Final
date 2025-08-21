@@ -52,7 +52,7 @@ private void handleLogin() {
             System.out.println("Admin login successful for: " + email);
             
             // افتح واجهة الداشبورد
-            Parent dashboardRoot = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml")); 
+            Parent dashboardRoot = FXMLLoader.load(getClass().getResource("/fxml/DashboardView.fxml")); 
             Scene dashboardScene = new Scene(dashboardRoot);
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(dashboardScene);
