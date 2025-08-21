@@ -8,53 +8,41 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@/css/tenants-style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.DashboardController">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@/fxml/tenants-style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.DashboardController">
    <left>
-      <!-- القائمة الجانبية -->
       <VBox styleClass="sidebar" prefWidth="250.0">
          <children>
             <Label styleClass="sidebar-title" alignment="CENTER" prefHeight="80.0" prefWidth="250.0" text="ARM System" />
-            <!-- === زر Dashboard لا يحتوي على onAction أو onMouseClicked === -->
             <Button styleClass="sidebar-button-selected" text="Dashboard" />
             <Button onAction="#handleGoToOwners" styleClass="sidebar-button" text="Owners" />
             <Button onAction="#handleGoToTenants" styleClass="sidebar-button" text="Tenants" />
             <Button onAction="#handleGoToApartments" styleClass="sidebar-button" text="Apartments" />
             <Button onAction="#handleGoToPayments" styleClass="sidebar-button" text="Payments" />
-            <Button styleClass="sidebar-button" text="Maintenance Requests" />
-            <Button styleClass="sidebar-button" text="Technicians" />
-            <Button styleClass="sidebar-button" text="Logout" />
+            <Button onAction="#handleGoToAssignApartment" styleClass="sidebar-button" text="Assign Apartment"/>
          </children>
       </VBox>
    </left>
    <center>
-      <!-- المحتوى الرئيسي -->
       <VBox spacing="20.0" style="-fx-background-color: #e0e0e0;" BorderPane.alignment="CENTER">
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
+         <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
          <children>
             <Label text="Dashboard">
                <font><Font name="System Bold" size="36.0" /></font>
             </Label>
-            
-            <!-- حاوية البطاقات -->
             <HBox spacing="20.0">
                <children>
-                  <!-- البطاقة الأولى: الملاك -->
                   <VBox fx:id="landlordsCard" onMouseClicked="#handleGoToOwnersCard" styleClass="dashboard-card" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="landlordsCountLabel" styleClass="dashboard-card-number" text="0" />
-                        <Label styleClass="dashboard-card-title" text="Registered Landlords" />
+                        <Label styleClass="dashboard-card-title" text="Registered Owners" />
                      </children>
                   </VBox>
-                  <!-- البطاقة الثانية: المستأجرون -->
                   <VBox fx:id="tenantsCard" onMouseClicked="#handleGoToTenantsCard" styleClass="dashboard-card" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="tenantsCountLabel" styleClass="dashboard-card-number" text="0" />
                         <Label styleClass="dashboard-card-title" text="Registered Tenants" />
                      </children>
                   </VBox>
-                  <!-- البطاقة الثالثة: الشقق -->
                   <VBox fx:id="apartmentsCard" onMouseClicked="#handleGoToApartmentsCard" styleClass="dashboard-card" alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="apartmentsCountLabel" styleClass="dashboard-card-number" text="0" />

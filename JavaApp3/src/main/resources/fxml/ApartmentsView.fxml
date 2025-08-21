@@ -11,21 +11,32 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<!-- تم ربط ملف CSS هنا -->
-
-<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@/fxml/tenants-style.css"  xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="com.javaapp3.ApartmentsViewController">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@/fxml/tenants-style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.ApartmentsViewController">
+   <left>
+      <VBox styleClass="sidebar" prefWidth="250.0">
+         <children>
+            <Label styleClass="sidebar-title" alignment="CENTER" prefHeight="80.0" prefWidth="250.0" text="ARM System" />
+            <Button onAction="#handleGoToDashboard" styleClass="sidebar-button" text="Dashboard" />
+            <Button onAction="#handleGoToOwners" styleClass="sidebar-button" text="Owners" />
+            <Button onAction="#handleGoToTenants" styleClass="sidebar-button" text="Tenants" />
+            <Button styleClass="sidebar-button-selected" text="Apartments" />
+            <Button onAction="#handleGoToPayments" styleClass="sidebar-button" text="Payments" />
+            <Button onAction="#handleGoToAssignApartment" styleClass="sidebar-button" text="Assign Apartment"/>
+         </children>
+      </VBox>
+   </left>
    <center>
-      <VBox prefHeight="665.0" prefWidth="1209.0" style="-fx-background-color: #f4f4f4;" BorderPane.alignment="CENTER">
+      <VBox style="-fx-background-color: #f4f4f4;" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="20.0">
                <padding><Insets left="20.0" right="20.0" /></padding>
                <children>
                   <Label text="Apartments"><font><Font name="System Bold" size="36.0" /></font></Label>
                   <Region HBox.hgrow="ALWAYS" />
-                  <Button fx:id="addApartmentButton" mnemonicParsing="false" onAction="#handleAddApartment" styleClass="add-button" text="+ Add Apartment" />
+                  <Button fx:id="addApartmentButton" onAction="#handleAddApartment" styleClass="add-button" text="+ Add Apartment" />
                </children>
             </HBox>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefHeight="546.0" prefWidth="1160.0" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                <content>
                   <TilePane fx:id="apartmentsGrid" hgap="20.0" vgap="20.0">
                      <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>

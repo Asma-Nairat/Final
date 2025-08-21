@@ -5,51 +5,54 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="664.0" prefWidth="1160.0" style="-fx-background-color: #7f8c8d;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.OwnersController" stylesheets="@/fxml/tenants-style.css">
-   <children>
-      
-      <!-- Main Content -->
-      <AnchorPane layoutX="62.0" layoutY="19.0" prefHeight="658.0" prefWidth="1087.0" style="-fx-background-color: #7f8c8d;" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="19.0">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" stylesheets="@/fxml/tenants-style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.OwnersController">
+   <left>
+      <VBox styleClass="sidebar" prefWidth="250.0">
          <children>
-            <!-- Owners Table and Controls -->
-            <VBox alignment="CENTER" layoutX="18.0" layoutY="14.0" maxWidth="1067.0" prefHeight="644.0" prefWidth="1067.0" spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 10;" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="14.0">
+            <Label styleClass="sidebar-title" alignment="CENTER" prefHeight="80.0" prefWidth="250.0" text="ARM System" />
+            <Button onAction="#handleGoToDashboard" styleClass="sidebar-button" text="Dashboard" />
+            <Button styleClass="sidebar-button-selected" text="Owners" />
+            <Button onAction="#handleGoToTenants" styleClass="sidebar-button" text="Tenants" />
+            <Button onAction="#handleGoToApartments" styleClass="sidebar-button" text="Apartments" />
+            <Button onAction="#handleGoToPayments" styleClass="sidebar-button" text="Payments" />
+            <Button onAction="#handleGoToAssignApartment" styleClass="sidebar-button" text="Assign Apartment"/>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <VBox style="-fx-background-color: #f4f4f4;" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="80.0" spacing="20.0">
+               <padding><Insets left="20.0" right="20.0" /></padding>
                <children>
-                  <BorderPane prefHeight="45.0" prefWidth="674.0">
-                     <right>
-                        <Button fx:id="addOwnerButton" mnemonicParsing="false" onAction="#handleAddOwner" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #5b2c87; -fx-text-fill: white; -fx-background-radius: 5; -fx-font-weight: bold;" text="Add Owner" BorderPane.alignment="CENTER">
-                           <font>
-                              <Font name="System" size="14.0" />
-                           </font>
-                        </Button>
-                     </right>
-                  </BorderPane>
-                  
-                  <!-- Owners Table -->
-                  <TableView fx:id="ownersTable" prefHeight="391.0" prefWidth="770.0">
-                     <columns>
-                        <TableColumn fx:id="nameColumn" prefWidth="109.0" text="Name" />
-                        <TableColumn fx:id="emailColumn" prefWidth="188.0" text="Email" />
-                        <TableColumn fx:id="phoneColumn" prefWidth="85.0" text="Phone" />
-                        <TableColumn fx:id="addressColumn" prefWidth="124.0" text="Address" />
-                        <TableColumn fx:id="actionsColumn" prefWidth="153.0" text="Actions" />
-                     </columns>
+                  <Label text="Owners"><font><Font name="System Bold" size="36.0" /></font></Label>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <Button onAction="#handleAddOwner" styleClass="add-button" text="+ Add Owner" />
+               </children>
+            </HBox>
+            <VBox style="-fx-background-color: white; -fx-background-radius: 10;" VBox.vgrow="ALWAYS">
+               <VBox.margin><Insets bottom="20.0" left="20.0" right="20.0" /></VBox.margin>
+               <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+               <children>
+                  <Label text="Registered Owners" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+                  <TableView fx:id="ownersTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                      <TableColumn text="OWNER NAME" />
+                      <TableColumn text="PHONE" />
+                      <TableColumn text="EMAIL" />
+                      <TableColumn text=" " />
+                    </columns>
+                     <VBox.margin><Insets top="20.0" /></VBox.margin>
                   </TableView>
                </children>
-               <padding>
-                  <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-               </padding>
             </VBox>
-            <Label layoutX="20.0" layoutY="14.0" text="Owners List" textFill="#7f8c8d">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
          </children>
-      </AnchorPane>
-   </children>
-</AnchorPane>
+      </VBox>
+   </center>
+</BorderPane>

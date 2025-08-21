@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class DashboardController implements Initializable {
@@ -35,36 +36,22 @@ public class DashboardController implements Initializable {
         loadDashboardData();
     }    
     
-    private void loadDashboardData() {
-        String ownersQuery = "SELECT COUNT(*) FROM owners";
-        String tenantsQuery = "SELECT COUNT(*) FROM tenants";
-        String apartmentsQuery = "SELECT COUNT(*) FROM apartments";
+// في ملف DashboardController.java
 
-        try (Connection conn = DatabaseConfig.getConnection();
-             Statement stmt = conn.createStatement()) {
-
-            // جلب وعرض عدد الملاك
-            ResultSet rsOwners = stmt.executeQuery(ownersQuery);
-            if (rsOwners.next()) {
-                landlordsCountLabel.setText(String.valueOf(rsOwners.getInt(1)));
-            }
-
-            // جلب وعرض عدد المستأجرين
-            ResultSet rsTenants = stmt.executeQuery(tenantsQuery);
-            if (rsTenants.next()) {
-                tenantsCountLabel.setText(String.valueOf(rsTenants.getInt(1)));
-            }
-
-            // جلب وعرض عدد الشقق
-            ResultSet rsApartments = stmt.executeQuery(apartmentsQuery);
-            if (rsApartments.next()) {
-                apartmentsCountLabel.setText(String.valueOf(rsApartments.getInt(1)));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+private void loadDashboardData() {
+    // 1. استدعاء الدوال من DatabaseManager لجلب الأرقام
+    int ownersCount = DatabaseManager.getOwnersCount();
+    int tenantsCount = DatabaseManager.getTenantsCount();
+    int apartmentsCount = DatabaseManager.getApartmentsCount();
+    
+    // 2. تحديث الليبلات (Labels) في الواجهة بالأرقام الجديدة
+    // نستخدم String.valueOf() لتحويل الرقم إلى نص
+    landlordsCountLabel.setText(String.valueOf(ownersCount));
+    tenantsCountLabel.setText(String.valueOf(tenantsCount));
+    apartmentsCountLabel.setText(String.valueOf(apartmentsCount));
+    
+    System.out.println("Dashboard data loaded: Owners=" + ownersCount + ", Tenants=" + tenantsCount + ", Apartments=" + apartmentsCount);
+}
     
     // --- دوال التنقل من القائمة الجانبية ---
     @FXML private void handleGoToOwners(ActionEvent event) throws IOException { navigateTo(event, "/fxml/OwnersView.fxml", "Owners Management"); }
@@ -87,6 +74,34 @@ public class DashboardController implements Initializable {
     private void handleGoToApartmentsCard(MouseEvent event) throws IOException {
         navigateTo(event, "/fxml/ApartmentsView.fxml", "Apartments Management");
     }
+    // أضيفي هذه الدالة إلى كل ملف Controller رئيسي
+
+@FXML
+private void handleGoToAssignApartment(ActionEvent event) throws IOException {
+    // اسم الملف يجب أن يتطابق مع الملف الذي أنشأناه
+    String fxmlFile = "/fxml/AssignApartmentView.fxml"; 
+    String title = "Assign Apartment to Tenant";
+    
+    try {
+        // نستخدم طريقة تحميل مختلفة قليلاً للنوافذ المنبثقة
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+        Parent root = loader.load();
+        
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(root));
+        
+        // initModality يمنع المستخدم من التفاعل مع النافذة الخلفية
+        stage.initModality(Modality.APPLICATION_MODAL); 
+        
+        // showAndWait يعرض النافذة وينتظر حتى يتم إغلاقها
+        stage.showAndWait();
+
+    } catch (IOException e) {
+        System.err.println("Failed to load the Assign Apartment view: " + fxmlFile);
+        e.printStackTrace();
+    }
+}
 
     // --- دوال التنقل الموحدة ---
     private void navigateTo(ActionEvent event, String fxmlFile, String title) throws IOException {

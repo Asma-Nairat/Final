@@ -6,7 +6,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
+import java.io.IOException;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 /**
  * FXML Controller class for PaymentsView.fxml
  * هذا هو الهيكل الأولي للمتحكم، وهو غير مبرمج بعد.
@@ -52,8 +60,80 @@ public class PaymentsViewController implements Initializable {
     @FXML
     private TableColumn<PaymentDetails, String> descriptionColumn;
 
+    
+    // أضيفي كل هذه الدوال إلى كلاس PaymentsViewController.java
+
+    // --- دوال التنقل من القائمة الجانبية ---
+    
+    @FXML
+    private void handleGoToDashboard(ActionEvent event) throws IOException {
+        navigateTo(event, "/fxml/DashboardView.fxml", "Dashboard");
+    }
+    
+    @FXML
+    private void handleGoToOwners(ActionEvent event) throws IOException {
+        navigateTo(event, "/fxml/OwnersView.fxml", "Owners Management");
+    }
+
+    @FXML
+    private void handleGoToTenants(ActionEvent event) throws IOException {
+        navigateTo(event, "/fxml/TenantsView.fxml", "Tenants Management");
+    }
+
+    @FXML
+    private void handleGoToApartments(ActionEvent event) throws IOException {
+        navigateTo(event, "/fxml/ApartmentsView.fxml", "Apartments Management");
+    }
+    
+    @FXML
+    private void handleGoToAssignApartment(ActionEvent event) throws IOException {
+        openModalWindow("/fxml/AssignApartmentView.fxml", "Assign Apartment to Tenant");
+    }
+    
+    /**
+     * تعمل عند الضغط على زر "Add Payment".
+     * تفتح نافذة منبثقة لتسجيل دفعة جديدة.
+     */
+    @FXML
+    private void handleAddPayment(ActionEvent event) throws IOException {
+        // يمكننا إعادة استخدام نفس نافذة "RecordPaymentView" التي أنشأناها سابقًا
+        openModalWindow("/fxml/RecordPaymentView.fxml", "Record New Payment");
+    }
+
+
+    // --- دوال مساعدة للتنقل وفتح النوافذ ---
+
+    /**
+     * دالة موحدة للانتقال بين الواجهات الرئيسية (استبدال المشهد).
+     */
+    private void navigateTo(ActionEvent event, String fxmlFile, String title) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle(title);
+        stage.show();
+    }
+    
+    /**
+     * دالة موحدة لفتح نافذة منبثقة (Modal Window).
+     */
+    private void openModalWindow(String fxmlFile, String title) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+    }
+    
     private javafx.collections.ObservableList<PaymentDetails> paymentData = javafx.collections.FXCollections.observableArrayList();
 
+    
+    
+    
+    
+    
     public static class PaymentDetails {
         private final javafx.beans.property.SimpleStringProperty id, tenantId, apartmentId, paymentDate, amount, paymentMethod, paymentStatus, description;
 

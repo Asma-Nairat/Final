@@ -4,6 +4,11 @@ package com.javaapp3;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import com.javaapp3.TenantsViewController.Tenant; // <-- استيراد الكلاس الداخلي
 
 public class DatabaseConfig {
     private static final String URL = "jdbc:postgresql://localhost:5432/asmaDB";
@@ -18,4 +23,12 @@ public class DatabaseConfig {
         }
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
+    
+    
+
+   
+
+
+
+    
 }

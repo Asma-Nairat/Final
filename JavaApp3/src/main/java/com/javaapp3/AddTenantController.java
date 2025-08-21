@@ -1,4 +1,5 @@
-package com.javaapp3; 
+package com.javaapp3;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -9,7 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import com.javaapp3.TenantsViewController.Tenant; // استيراد كلاس Tenant
+// استيراد كلاس Tenant من مكانه الجديد (إذا نقلته إلى حزمة models)
+// أو من com.javaapp3.TenantsViewController.Tenant إذا بقي ككلاس داخلي
+import com.javaapp3.TenantsViewController.Tenant; 
 
 public class AddTenantController implements Initializable {
 
@@ -20,26 +23,12 @@ public class AddTenantController implements Initializable {
     @FXML private TextArea addressArea;
     @FXML private Button cancelButton;
     @FXML private Button addButton;
-    
-    // متغير لتخزين المستأجر المعدل وإرجاعه للواجهة السابقة
-    private Tenant editedTenant = null;
+
+    // === تم توحيد اسم المتغير هنا ===
+    private Tenant resultTenant = null;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) { }    
-
-    /**
-     * دالة جديدة لتعبئة الفورم ببيانات المستأجر الحالي عند التعديل
-     */
-    public void loadTenantForEditing(Tenant tenant) {
-        fullNameField.setText(tenant.getName());
-        emailField.setText(tenant.getEmail());
-        phoneField.setText(tenant.getPhone());
-        occupationField.setText(tenant.getOccupation());
-        addressArea.setText(tenant.getAddress());
-
-        // تغيير نص الزر ليدل على التعديل
-        addButton.setText("Save Changes");
-    }
 
     @FXML
     private void handleCancelButton(ActionEvent event) {
@@ -52,35 +41,50 @@ public class AddTenantController implements Initializable {
         String fullName = fullNameField.getText();
         String phone = phoneField.getText();
 
-        if (fullName.isEmpty() || phone.isEmpty()) {
-            // ... (كود التحقق من الحقول يبقى كما هو)
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Input Validation Failed");
-            alert.setContentText("Please fill in Full Name and Phone fields (*)");
-            alert.showAndWait();
+        if (fullName.trim().isEmpty() || phone.trim().isEmpty()) {
+            showAlert("Input Error", "Full Name and Phone are required fields.", Alert.AlertType.ERROR);
             return;
         }
 
-        // إنشاء كائن Tenant جديد بالبيانات المحدثة
-        this.editedTenant = new Tenant(
+        Tenant newTenant = new Tenant(
+                0, 
                 fullName,
                 emailField.getText(),
                 phone,
                 occupationField.getText(),
-                addressArea.getText()
+                addressArea.getText(),
+                "Active"
         );
         
-        // إغلاق النافذة
-        Stage stage = (Stage) addButton.getScene().getWindow();
-        stage.close();
+        boolean success = DatabaseManager.addTenant(newTenant);
+
+        if (success) {
+            showAlert("Success", "Tenant has been added successfully!", Alert.AlertType.INFORMATION);
+            
+            // نخزن المستأجر الجديد في المتغير
+            this.resultTenant = newTenant;
+            
+            Stage stage = (Stage) addButton.getScene().getWindow();
+            stage.close();
+        } else {
+            showAlert("Database Error", "Failed to add the tenant to the database.", Alert.AlertType.ERROR);
+        }
     }
     
+    public void loadTenantForEditing(Tenant tenant) {
+        // ... (الكود يبقى كما هو)
+    }
+
     /**
-     * دالة للسماح للواجهة السابقة بالحصول على البيانات المعدلة
-     * @return المستأجر بالبيانات الجديدة، أو null إذا تم الإلغاء
+     * دالة للسماح للواجهة السابقة بالحصول على المستأجر الذي تم إنشاؤه.
+     * @return كائن المستأجر، أو null إذا تم الإلغاء.
      */
     public Tenant getEditedTenant() {
-        return editedTenant;
+        // === تم تصحيح اسم المتغير هنا ===
+        return resultTenant;
+    }
+
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        // ... (الكود يبقى كما هو)
     }
 }

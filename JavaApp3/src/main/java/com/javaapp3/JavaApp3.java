@@ -14,10 +14,10 @@ public class JavaApp3 extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         // تحميل الواجهة الرئيسية
-FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
+FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DashboardView.fxml"));
 Parent root = loader.load();
         Scene scene = new Scene(root);
-        stage.setTitle("Login");
+         stage.setTitle("Apartment Renting Management System"); 
         stage.setScene(scene);
         stage.show();
 

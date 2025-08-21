@@ -14,6 +14,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.event.ActionEvent;
+import javafx.scene.Parent;
 
 public class OwnersController {
     @FXML
@@ -166,7 +168,34 @@ public class OwnersController {
         }
         ownersTable.setItems(ownersList);
     }
+// أضيفي هذه الدالة إلى كل ملف Controller رئيسي
 
+@FXML
+private void handleGoToAssignApartment(ActionEvent event) throws IOException {
+    // اسم الملف يجب أن يتطابق مع الملف الذي أنشأناه
+    String fxmlFile = "/fxml/AssignApartmentView.fxml"; 
+    String title = "Assign Apartment to Tenant";
+    
+    try {
+        // نستخدم طريقة تحميل مختلفة قليلاً للنوافذ المنبثقة
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+        Parent root = loader.load();
+        
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(root));
+        
+        // initModality يمنع المستخدم من التفاعل مع النافذة الخلفية
+        stage.initModality(Modality.APPLICATION_MODAL); 
+        
+        // showAndWait يعرض النافذة وينتظر حتى يتم إغلاقها
+        stage.showAndWait();
+
+    } catch (IOException e) {
+        System.err.println("Failed to load the Assign Apartment view: " + fxmlFile);
+        e.printStackTrace();
+    }
+}
     private void handleShowDetails(Owner owner) {
         // Implement details display (e.g., open a new window or dialog)
         System.out.println("Details for: " + owner.getName() + ", Email: " + owner.getEmail());
