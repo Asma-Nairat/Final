@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<VBox prefWidth="800.0" spacing="20.0" stylesheets="@/fxml/tenants-style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.PayRentController">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <!-- الجزء العلوي: البحث عن الشقة -->
+      <HBox alignment="CENTER_LEFT" spacing="10.0">
+         <children>
+            <Label styleClass="form-label" text="Search by Apartment ID:" />
+            <TextField fx:id="searchApartmentIdField" prefWidth="150.0" promptText="Enter Apartment ID" />
+            <Button fx:id="searchButton" text="Search" />
+         </children>
+      </HBox>
+      <Separator />
+      
+      <!-- الجزء الأوسط: تفاصيل الدفعة -->
+      <GridPane hgap="20.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="350.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <!-- القسم الأيسر: تفاصيل حساب الدفعة -->
+            <VBox spacing="15.0" style="-fx-background-color: #f0f4ff; -fx-padding: 20; -fx-background-radius: 10;">
+               <children>
+                  <Label styleClass="form-label" text="Select Rent Type: *" />
+                  <ComboBox fx:id="rentTypeComboBox" prefWidth="250.0" promptText="Select number of months" />
+                  <Separator />
+                  <GridPane hgap="10.0" vgap="10.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" />
+                      <RowConstraints minHeight="10.0" />
+                      <RowConstraints minHeight="10.0" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Rent Per Month:" />
+                        <Label text="Total Months:" GridPane.rowIndex="1" />
+                        <Label text="Total Rent to Pay:" style="-fx-font-weight: bold;" GridPane.rowIndex="2" />
+                        <Label fx:id="rentPerMonthLabel" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" />
+                        <Label fx:id="totalMonthsLabel" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="totalRentLabel" text="=" style="-fx-font-size: 16px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+            
+            <!-- القسم الأيمن: تفاصيل المستأجر -->
+            <VBox spacing="15.0" style="-fx-background-color: #f0f4ff; -fx-padding: 20; -fx-background-radius: 10;" GridPane.columnIndex="1">
+               <children>
+                  <Label text="TENANT DETAIL" style="-fx-font-weight: bold; -fx-text-fill: grey;" />
+                  <GridPane hgap="10.0" vgap="5.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" />
+                      <RowConstraints minHeight="10.0" />
+                      <RowConstraints minHeight="10.0" />
+                        <RowConstraints minHeight="10.0" />
+                        <RowConstraints minHeight="10.0" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Full name" />
+                        <Label text="Email address" GridPane.rowIndex="1" />
+                        <Label text="Phone no." GridPane.rowIndex="2" />
+                        <Label text="Occupation" GridPane.rowIndex="3" />
+                        <Label text="Address" GridPane.rowIndex="4" />
+                        <Label fx:id="fullNameLabel" text="-" GridPane.columnIndex="1" />
+                        <Label fx:id="emailLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="phoneLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="occupationLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label fx:id="addressLabel" text="-" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+      
+      <!-- الجزء السفلي: أزرار التحكم -->
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+         <children>
+            <Button styleClass="cancel-button" text="Cancel" />
+            <Button styleClass="add-button" text="Confirm Payment" />
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!-- تم ربطه بنفس ملف CSS للحفاظ على تناسق الألوان والخطوط -->
+<VBox alignment="TOP_CENTER" maxWidth="600.0" prefWidth="600.0" spacing="15.0" stylesheets="@/fxml/tenants-style.css"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.InvoiceController">
+   <padding>
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+   </padding>
+   <children>
+      <!-- العنوان الرئيسي -->
+      <Label text="INVOICE" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #555555;" />
+      
+      <!-- رقم الفاتورة والتاريخ -->
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+            <VBox alignment="CENTER_RIGHT">
+               <children>
+                  <Label fx:id="invoiceIdLabel" text="INVOICE #" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+                  <Label fx:id="invoiceDateLabel" text="Date:" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Separator />
+      
+      <!-- معلومات المستأجر والمالك -->
+      <GridPane hgap="20.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <!-- معلومات المستأجر -->
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Invoice To:" style="-fx-font-weight: bold;" />
+                  <Label fx:id="tenantNameLabel" text="Tenant Full Name" />
+                  <Label fx:id="tenantPhoneLabel" text="Tenant Phone" />
+                  <Label fx:id="tenantEmailLabel" text="Tenant Email" />
+                  <Label fx:id="tenantAddressLabel" text="Tenant Address" wrapText="true" />
+               </children>
+            </VBox>
+            <!-- معلومات المالك -->
+            <VBox spacing="5.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Payment To:" style="-fx-font-weight: bold;" />
+                  <Label fx:id="landlordNameLabel" text="Landlord Full Name" />
+                  <Label fx:id="landlordPhoneLabel" text="Landlord Phone" />
+                  <Label fx:id="landlordEmailLabel" text="Landlord Email" />
+                  <Label fx:id="landlordAddressLabel" text="Landlord Address" wrapText="true" />
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+      <Separator />
+      
+      <!-- تفاصيل الفاتورة -->
+      <Label text="Billing Details" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+      <GridPane hgap="10.0" vgap="5.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" />
+          <RowConstraints minHeight="10.0" />
+            <RowConstraints minHeight="10.0" />
+            <RowConstraints minHeight="10.0" />
+        </rowConstraints>
+         <children>
+            <Label text="Apartment Address:" />
+            <Label fx:id="apartmentAddressLabel" text="-" wrapText="true" GridPane.columnIndex="1" />
+            <Label text="Rent For Month:" GridPane.rowIndex="1" />
+            <Label fx:id="rentMonthLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Payment Method:" GridPane.rowIndex="2" />
+            <Label fx:id="paymentMethodLabel" text="-" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Status:" style="-fx-font-weight: bold;" GridPane.rowIndex="3" />
+            <Label fx:id="paymentStatusLabel" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      
+      <!-- المجموع النهائي -->
+      <HBox alignment="CENTER_RIGHT">
+         <children>
+            <Label text="Total Amount:" style="-fx-font-size: 20px;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="totalAmountLabel" text="0.00 JD" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #000080;" />
+         </children>
+         <padding>
+            <Insets top="20.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

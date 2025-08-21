@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" styleClass="form-container" prefWidth="500.0" spacing="20.0" stylesheets="@/fxml/tenants-style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.AddTenantController">
+   <children>
+      <Label styleClass="form-title" text="Add New Tenant" />
+      <GridPane styleClass="form-grid">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label styleClass="form-label" text="Full Name *" />
+            <TextField fx:id="fullNameField" GridPane.columnIndex="1" />
+            <Label styleClass="form-label" text="Email" GridPane.rowIndex="1" />
+            <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label styleClass="form-label" text="Phone *" GridPane.rowIndex="2" />
+            <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label styleClass="form-label" text="Occupation" GridPane.rowIndex="3" />
+            <TextField fx:id="occupationField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label styleClass="form-label" text="Address" GridPane.rowIndex="4" />
+            <TextArea fx:id="addressArea" prefHeight="80.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         </children>
+      </GridPane>
+      <HBox alignment="CENTER_RIGHT" spacing="10.0">
+         <children>
+            <Button fx:id="cancelButton" onAction="#handleCancelButton" styleClass="cancel-button" text="Cancel" />
+            <Button fx:id="addButton" onAction="#handleAddButton" styleClass="add-button" text="Add Tenant" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

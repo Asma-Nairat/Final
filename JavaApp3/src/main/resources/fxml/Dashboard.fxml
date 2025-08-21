@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.DashboardController">
+   <children>
+      <!-- Sidebar -->
+      <VBox prefHeight="600.0" prefWidth="200.0" style="-fx-background-color: #2c3e50;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <!-- Logo/Title -->
+            <Label text="ARM System" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <padding>
+                  <Insets bottom="30.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </Label>
+            
+            <!-- Menu Items -->
+            <VBox prefHeight="453.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <HBox fx:id="dashboardMenu" alignment="CENTER_LEFT" onMouseClicked="#handleDashboardClick" prefHeight="40.0" style="-fx-background-color: #34495e;">
+                     <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label text="Dashboard" textFill="WHITE">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  
+                  <HBox fx:id="ownersMenu" alignment="CENTER_LEFT" onMouseClicked="#handleOwnersClick" prefHeight="40.0" style="-fx-background-color: transparent;">
+                     <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label text="Owners" textFill="#95a5a6">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  
+                  <HBox fx:id="tenantsMenu" alignment="CENTER_LEFT" onMouseClicked="#handleTenantsClick" prefHeight="40.0" style="-fx-background-color: transparent;">
+                     <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label text="Tenants" textFill="#95a5a6">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  
+                  <HBox fx:id="apartmentsMenu" alignment="CENTER_LEFT" onMouseClicked="#handleApartmentsClick" prefHeight="40.0" style="-fx-background-color: transparent;">
+                     <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label text="Apartments" textFill="#95a5a6">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  
+                  <HBox fx:id="housesMenu" alignment="CENTER_LEFT" onMouseClicked="#handleHousesClick" prefHeight="40.0" style="-fx-background-color: transparent;">
+                     <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label text="Payments" textFill="#95a5a6">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  
+                  <HBox fx:id="assignHouseMenu" alignment="CENTER_LEFT" onMouseClicked="#handleAssignHouseClick" prefHeight="40.0" style="-fx-background-color: transparent;">
+                     <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label text="Pay Rent" textFill="#95a5a6">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  
+                  <HBox fx:id="paymentsMenu" alignment="CENTER_LEFT" onMouseClicked="#handlePaymentsClick" prefHeight="58.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+                     <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label text="Maintenance Requests" textFill="#95a5a6">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="paymentsMenu1" alignment="CENTER_LEFT" onMouseClicked="#handlePaymentsClick" prefHeight="58.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+                     <children>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets left="20.0" right="10.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label text="Technicians" textFill="#95a5a6">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </VBox>
+            
+            <!-- Logout Button at bottom -->
+            <HBox fx:id="logoutMenu" alignment="CENTER_LEFT" onMouseClicked="#handleLogoutClick" prefHeight="110.0" prefWidth="133.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+               <children>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets left="20.0" right="10.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label text="Logout" textFill="#95a5a6">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+      
+      <!-- Top Bar -->
+      <HBox alignment="CENTER_LEFT" prefHeight="60.0" style="-fx-background-color: #ecf0f1;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets left="20.0" right="10.0" />
+               </HBox.margin>
+            </ImageView>
+            <Label text="Dashboard">
+               <font>
+                  <Font name="FreeSerif Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      
+      <!-- Main Content -->
+      <AnchorPane fx:id="mainContent" style="-fx-background-color: #7f8c8d;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+         <children>
+            <!-- Dashboard Cards -->
+            <HBox spacing="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+               <children>
+                  <!-- Owners Card -->
+                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                     <children>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #e3f2fd; -fx-background-radius: 50;">
+                                 <children>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </VBox>
+                              <Label text="4">
+                                 <font>
+                                    <Font name="System Bold" size="36.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Label text="Registered" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label text="landlords" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+                  
+                  <!-- Tenants Card -->
+                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                     <children>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #fce4ec; -fx-background-radius: 50;">
+                                 <children>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </VBox>
+                              <Label text="5">
+                                 <font>
+                                    <Font name="System Bold" size="36.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Label text="Registered" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Tenants" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+                  
+                  <!-- Apartments Card -->
+                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                     <children>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #f3e5f5; -fx-background-radius: 50;">
+                                 <children>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </VBox>
+                              <Label text="6">
+                                 <font>
+                                    <Font name="System Bold" size="36.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Label text="Registered" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Apartments" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+                  
+                  <!-- Houses Card -->
+                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                     <children>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #fff8e1; -fx-background-radius: 50;">
+                                 <children>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </VBox>
+                              <Label text="14">
+                                 <font>
+                                    <Font name="System Bold" size="36.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Label text="Registered" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Maintenance" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+                  
+                  <!-- Payments Card -->
+                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                     <children>
+                        <HBox alignment="CENTER" spacing="10.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #e0f2f1; -fx-background-radius: 50;">
+                                 <children>
+                                    <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </VBox>
+                              <Label text="24">
+                                 <font>
+                                    <Font name="System Bold" size="36.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Label text="Payments" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Done" textFill="#7f8c8d">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
