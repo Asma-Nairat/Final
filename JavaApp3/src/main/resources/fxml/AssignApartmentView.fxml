@@ -108,14 +108,15 @@
          </children>
       </GridPane>
       
-      <HBox alignment="CENTER_RIGHT" spacing="10.0">
-         <children>
-            <Button styleClass="cancel-button" text="Cancel" />
-            <Button styleClass="add-button" text="Assign Apartment" />
-         </children>
-         <padding>
-            <Insets top="20.0" />
-         </padding>
-      </HBox>
+      <!-- في نهاية AssignApartmentView.fxml -->
+<HBox alignment="CENTER_RIGHT" spacing="10.0">
+   <children>
+      <Button onAction="#handleCancelAssignment" styleClass="cancel-button" text="Cancel" />
+      <Button onAction="#handleAssignApartment" styleClass="add-button" text="Assign Apartment" />
+   </children>
+   <padding>
+      <Insets top="20.0" />
+   </padding>
+</HBox>
    </children>
 </VBox>

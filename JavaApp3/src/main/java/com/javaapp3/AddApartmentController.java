@@ -88,63 +88,29 @@ public boolean isSaved() {
         }
     }
 
-    @FXML
-    private void handleAddButton(ActionEvent event) {
-        // --- قراءة البيانات من الحقول ---
-        String name = apartmentNameField.getText();
-        String type = apartmentTypeCombo.getValue();
-        // === التغيير الثالث هنا: نقرأ من TextField بدلاً من ComboBox ===
-        String owner = apartmentOwnerField.getText();
-        String town = townField.getText();
-        
-        // --- التحقق من صحة المدخلات ---
-        if (name.isEmpty() || type == null || owner.isEmpty() || town.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Input Validation Failed");
-            alert.setContentText("Please fill in all required fields (*)");
-            alert.showAndWait();
-            return;
-        }
-        
-        // --- إضافة البيانات إلى قاعدة البيانات ---
-        try (java.sql.Connection conn = DatabaseConfig.getConnection()) {
-            String sql = "INSERT INTO apartments (name, type, owner, town, location, description, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, name);
-                stmt.setString(2, type);
-                stmt.setString(3, owner);
-                stmt.setString(4, town);
-                stmt.setString(5, locationField.getText());
-                stmt.setString(6, descriptionArea.getText());
-                stmt.setString(7, selectedImageFile != null ? selectedImageFile.getAbsolutePath() : null);
-                stmt.executeUpdate();
-            }
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText(null);
-            alert.setContentText("Apartment added successfully!");
-            alert.showAndWait();
-            this.saved = true;
-            Stage stage = (Stage) addButton.getScene().getWindow();
-            stage.close();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Database Error");
-            alert.setHeaderText("Failed to add apartment");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
-        
-        
-        
-        
-        
-         
-        
-        
-    }
+// استبدل دالة handleAddButton في AddApartmentController.java بهذا الكود:
+// استبدل handleAddButton في AddApartmentController.java بهذا:
+
+@FXML
+private void handleAddButton(ActionEvent event) {
+    // قراءة البيانات من الحقول
+    String name = apartmentNameField.getText().trim();
+    String type = apartmentTypeCombo.getValue();
+    String ownerName = apartmentOwnerField.getText().trim();
+    String town = townField.getText().trim();
+    String location = locationField.getText().trim();
+    String description = descriptionArea.getText().trim();
     
+    // التحقق من صحة المدخلات
+    if (name.isEmpty() || type == null || ownerName.isEmpty() || town.isEmpty()) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Input Validation Failed");
+        alert.setContentText("Please fill in all required fields (*)");
+        alert.showAndWait();
+        return;
+    }
+}
     
     // هذه الدالة تضاف إلى ملف AddApartmentController.java
 

@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 /**
@@ -94,11 +95,7 @@ public class PaymentsViewController implements Initializable {
      * تعمل عند الضغط على زر "Add Payment".
      * تفتح نافذة منبثقة لتسجيل دفعة جديدة.
      */
-    @FXML
-    private void handleAddPayment(ActionEvent event) throws IOException {
-        // يمكننا إعادة استخدام نفس نافذة "RecordPaymentView" التي أنشأناها سابقًا
-        openModalWindow("/fxml/RecordPaymentView.fxml", "Record New Payment");
-    }
+
 
 
     // --- دوال مساعدة للتنقل وفتح النوافذ ---
@@ -172,42 +169,157 @@ public class PaymentsViewController implements Initializable {
      * هذه الدالة تعمل تلقائياً عند تحميل الواجهة.
      * سنقوم ببرمجتها لاحقاً لجلب البيانات من قاعدة البيانات وتعبئة الجدول.
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // جلب بيانات الدفعات من قاعدة البيانات وتعبئة الجدول
-        paymentData.clear();
-        try (java.sql.Connection conn = DatabaseConfig.getConnection()) {
-String sql = "SELECT id, tenant_id, apartment_id, payment_date, amount, payment_method, payment_status, description FROM payments";
-            try (java.sql.Statement stmt = conn.createStatement();
-                 java.sql.ResultSet rs = stmt.executeQuery(sql)) {
-                while (rs.next()) {
-                    paymentData.add(new PaymentDetails(
-                        rs.getString("id"),
-                        rs.getString("tenant_id"),
-                        rs.getString("apartment_id"),
-                        rs.getString("payment_date"),
-                        rs.getString("amount"),
-                        rs.getString("payment_method"),
-                        rs.getString("payment_status"),
-                        rs.getString("description")
-                    ));
+// استبدل دالة initialize في PaymentsViewController.java بهذا الكود:
+// أضف هذه الدوال إلى PaymentsViewController.java:
+
+@Override
+public void initialize(URL url, ResourceBundle rb) {
+    // الكود الموجود سابقاً...
+    loadPaymentsFromDatabase();
+    setupTableColumns();
+    System.out.println("Payments View loaded with " + paymentData.size() + " payments from database.");
+}
+
+private void loadPaymentsFromDatabase() {
+    paymentData.clear();
+    try (java.sql.Connection conn = DatabaseConfig.getConnection()) {
+        String sql = """
+            SELECT p.id, p.tenant_id, p.apartment_id, p.payment_date, p.amount, 
+                   p.month, p.payment_method, p.payment_status, p.description,
+                   t.name as tenant_name, a.name as apartment_name
+            FROM payments p
+            JOIN tenants t ON p.tenant_id = t.id
+            JOIN apartments a ON p.apartment_id = a.id
+            ORDER BY p.payment_date DESC, p.id DESC
+        """;
+        
+        try (java.sql.Statement stmt = conn.createStatement();
+             java.sql.ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                paymentData.add(new PaymentDetails(
+                    rs.getString("id"),
+                    rs.getString("tenant_name") + " (ID: " + rs.getString("tenant_id") + ")",
+                    rs.getString("apartment_name") + " (ID: " + rs.getString("apartment_id") + ")",
+                    rs.getString("payment_date"),
+                    rs.getString("amount") + " JD",
+                    rs.getString("payment_method") != null ? rs.getString("payment_method") : "Cash",
+                    rs.getString("payment_status") != null ? rs.getString("payment_status") : "Completed",
+                    rs.getString("description") != null ? rs.getString("description") : ""
+                ));
+            }
+        }
+    } catch (Exception e) {
+        System.err.println("Error loading payments from DB: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
+private void setupTableColumns() {
+    // ربط أعمدة الجدول بالبيانات
+    idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+    tenantIdColumn.setCellValueFactory(cellData -> cellData.getValue().tenantIdProperty());
+    apartmentIdColumn.setCellValueFactory(cellData -> cellData.getValue().apartmentIdProperty());
+    paymentDateColumn.setCellValueFactory(cellData -> cellData.getValue().paymentDateProperty());
+    amountColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty());
+    paymentMethodColumn.setCellValueFactory(cellData -> cellData.getValue().paymentMethodProperty());
+    paymentStatusColumn.setCellValueFactory(cellData -> cellData.getValue().paymentStatusProperty());
+    descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+
+    // تخصيص عمود الحالة بالألوان
+    paymentStatusColumn.setCellFactory(column -> new javafx.scene.control.TableCell<PaymentDetails, String>() {
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item == null || empty) {
+                setText(null);
+                setStyle("");
+            } else {
+                setText(item);
+                if ("Completed".equals(item)) {
+                    setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                } else if ("Pending".equals(item)) {
+                    setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
+                } else {
+                    setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
                 }
             }
-        } catch (Exception e) {
-            System.err.println("Error loading payments from DB: " + e.getMessage());
         }
+    });
+    
+    // إضافة قائمة سياق للجدول (Right-click menu)
+    javafx.scene.control.ContextMenu contextMenu = new javafx.scene.control.ContextMenu();
+    javafx.scene.control.MenuItem viewInvoiceItem = new javafx.scene.control.MenuItem("View Invoice");
+    javafx.scene.control.MenuItem payRentItem = new javafx.scene.control.MenuItem("Pay Rent");
+    
+    viewInvoiceItem.setOnAction(e -> {
+        PaymentDetails selected = paymentsTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            openInvoiceView(Integer.parseInt(selected.getId()));
+        }
+    });
+    
+    payRentItem.setOnAction(e -> {
+        try {
+            openModalWindow("/fxml/PayRentView.fxml", "Pay Rent");
+            // إعادة تحميل البيانات بعد إضافة دفعة جديدة
+            loadPaymentsFromDatabase();
+            paymentsTable.setItems(paymentData);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    });
+    
+    contextMenu.getItems().addAll(viewInvoiceItem, payRentItem);
+    paymentsTable.setContextMenu(contextMenu);
+    
+    // Double-click لفتح الفاتورة
+    paymentsTable.setRowFactory(tv -> {
+        javafx.scene.control.TableRow<PaymentDetails> row = new javafx.scene.control.TableRow<>();
+        row.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2 && !row.isEmpty()) {
+                PaymentDetails selected = row.getItem();
+                openInvoiceView(Integer.parseInt(selected.getId()));
+            }
+        });
+        return row;
+    });
 
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
-        tenantIdColumn.setCellValueFactory(cellData -> cellData.getValue().tenantIdProperty());
-        apartmentIdColumn.setCellValueFactory(cellData -> cellData.getValue().apartmentIdProperty());
-        paymentDateColumn.setCellValueFactory(cellData -> cellData.getValue().paymentDateProperty());
-        amountColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty());
-        paymentMethodColumn.setCellValueFactory(cellData -> cellData.getValue().paymentMethodProperty());
-        paymentStatusColumn.setCellValueFactory(cellData -> cellData.getValue().paymentStatusProperty());
-        descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
+    paymentsTable.setItems(paymentData);
+}
 
-        paymentsTable.setItems(paymentData);
-        System.out.println("Payments View and Controller have been loaded successfully.");
-    }    
+private void openInvoiceView(int paymentId) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InvoiceView.fxml"));
+        Parent root = loader.load();
+        InvoiceController invoiceController = loader.getController();
+        
+        // تحميل بيانات الفاتورة
+        invoiceController.loadInvoiceData(paymentId);
+        
+        Stage stage = new Stage();
+        stage.setTitle("Invoice #" + paymentId);
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+        
+    } catch (IOException e) {
+        e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Cannot open invoice");
+        alert.setContentText("Failed to load the invoice view.");
+        alert.showAndWait();
+    }
+}
+
+@FXML
+private void handleAddPayment(ActionEvent event) throws IOException {
+    openModalWindow("/fxml/PayRentView.fxml", "Add New Payment");
+    // إعادة تحميل البيانات
+    loadPaymentsFromDatabase();
+    paymentsTable.setItems(paymentData);
+}
+
+// باقي الدوال تبقى كما هي...  
     
 }
