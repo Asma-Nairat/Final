@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -60,20 +61,7 @@ private void loadDashboardData() {
     @FXML private void handleGoToPayments(ActionEvent event) throws IOException { navigateTo(event, "/fxml/PaymentsView.fxml", "Payments History"); }
 
     // --- دوال التنقل من البطاقات ---
-    @FXML
-    private void handleGoToOwnersCard(MouseEvent event) throws IOException {
-        navigateTo(event, "/fxml/OwnersView.fxml", "Owners Management");
-    }
-
-    @FXML
-    private void handleGoToTenantsCard(MouseEvent event) throws IOException {
-        navigateTo(event, "/fxml/TenantsView.fxml", "Tenants Management");
-    }
-
-    @FXML
-    private void handleGoToApartmentsCard(MouseEvent event) throws IOException {
-        navigateTo(event, "/fxml/ApartmentsView.fxml", "Apartments Management");
-    }
+   
     // أضيفي هذه الدالة إلى كل ملف Controller رئيسي
 
 @FXML
@@ -116,4 +104,64 @@ private void handleGoToAssignApartment(ActionEvent event) throws IOException {
     private void navigateTo(MouseEvent event, String fxmlFile, String title) throws IOException {
         navigateTo(new ActionEvent(event.getSource(), event.getTarget()), fxmlFile, title);
     }
+    
+    
+    
+    // أضف هذه الدالة أو استبدلها في DashboardController.java:
+
+// --- دالة التنقل من بطاقة المالكين ---
+@FXML
+private void handleGoToOwnersCard(MouseEvent event) {
+    try {
+        // تحميل واجهة المالكين
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/OwnersView.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Owners Management");
+        stage.show();
+        
+        System.out.println("Navigated to Owners view from dashboard card.");
+        
+    } catch (IOException e) {
+        System.err.println("Failed to navigate to Owners view: " + e.getMessage());
+        e.printStackTrace();
+        
+        // إظهار رسالة خطأ للمستخدم
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Navigation Error");
+        alert.setHeaderText("Cannot open Owners page");
+        alert.setContentText("Failed to load the Owners management page.");
+        alert.showAndWait();
+    }
+}
+
+// تأكد من أن الدوال الأخرى موجودة أيضاً:
+@FXML
+private void handleGoToTenantsCard(MouseEvent event) {
+    try {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/TenantsView.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Tenants Management");
+        stage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+@FXML
+private void handleGoToApartmentsCard(MouseEvent event) {
+    try {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/ApartmentsView.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Apartments Management");
+        stage.show();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 }

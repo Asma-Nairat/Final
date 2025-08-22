@@ -1,5 +1,5 @@
-package com.javaapp3; // تأكد من أن اسم الحزمة صحيح
-import javafx.collections.ObservableList;
+package com.javaapp3;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -7,29 +7,22 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
 public class AddOwnerController {
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private TextField phoneField;
-    @FXML
-    private TextArea addressField;
-    @FXML
-    private Button cancelButton;
-    @FXML
-    private Button addLandlordButton;
+    @FXML private TextField nameField;
+    @FXML private TextField emailField;
+    @FXML private TextField phoneField;
+    @FXML private TextArea addressField;
+    @FXML private Button addLandlordButton;
 
-    private ObservableList<OwnersController.Owner> ownersList;
     private OwnersController.Owner ownerToEdit;
-
-    public void setOwnersList(ObservableList<OwnersController.Owner> ownersList) {
-        this.ownersList = ownersList;
-    }
 
     public void setOwnerToEdit(OwnersController.Owner owner) {
         this.ownerToEdit = owner;
+        
+        // تعبئة الحقول ببيانات المالك الحالي للتعديل
         nameField.setText(owner.getName());
         emailField.setText(owner.getEmail());
         phoneField.setText(owner.getPhone());
@@ -44,64 +37,78 @@ public class AddOwnerController {
         String phone = phoneField.getText().trim();
         String address = addressField.getText().trim();
 
-        // Validate required fields
         if (name.isEmpty() || email.isEmpty() || phone.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Missing Required Fields");
-            alert.setContentText("Please fill in Name, Email, and Phone fields.");
-            alert.showAndWait();
+            showAlert("Missing Fields", "Please fill in all required fields.");
             return;
         }
 
         if (ownerToEdit != null) {
-            // Update existing owner in database
-            try (java.sql.Connection conn = DatabaseConfig.getConnection()) {
-                String sql = "UPDATE owners SET email = ?, phone = ?, address = ? WHERE name = ?";
-                try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setString(1, email);
-                    stmt.setString(2, phone);
-                    stmt.setString(3, address);
-                    stmt.setString(4, name);
-                    int affectedRows = stmt.executeUpdate();
-                    if (affectedRows > 0) {
-                        System.out.println("Owner '" + name + "' updated in database.");
-                    } else {
-                        System.err.println("No owner updated in DB. Check name value.");
-                    }
-                }
-            } catch (Exception ex) {
-                System.err.println("Error updating owner in DB: " + ex.getMessage());
-            }
+            // منطق التحديث: نستخدم id لتحديد السجل
+            updateOwner(name, email, phone, address);
         } else {
-            // Add new owner to database
-            try (java.sql.Connection conn = DatabaseConfig.getConnection()) {
-                String sql = "INSERT INTO owners (name, email, phone, address) VALUES (?, ?, ?, ?)";
-                try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
-                    stmt.setString(1, name);
-                    stmt.setString(2, email);
-                    stmt.setString(3, phone);
-                    stmt.setString(4, address);
-                    int affectedRows = stmt.executeUpdate();
-                    if (affectedRows > 0) {
-                        System.out.println("Owner '" + name + "' added to database.");
-                    } else {
-                        System.err.println("No owner added to DB. Check values.");
-                    }
-                }
-            } catch (Exception ex) {
-                System.err.println("Error adding owner to DB: " + ex.getMessage());
-            }
+            // منطق الإضافة: نضيف سجلاً جديداً
+            addNewOwner(name, email, phone, address);
         }
 
-        // Close the window
-        Stage stage = (Stage) addLandlordButton.getScene().getWindow();
-        stage.close();
+        // إغلاق النافذة بعد الإضافة أو التحديث
+        closeWindow();
+    }
+
+    private void updateOwner(String name, String email, String phone, String address) {
+        // *** تعديل: التحديث أصبح الآن باستخدام الـ id الآمن ***
+        String sql = "UPDATE owners SET name = ?, email = ?, phone = ?, address = ? WHERE id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, name);
+            stmt.setString(2, email);
+            stmt.setString(3, phone);
+            stmt.setString(4, address);
+            // *** تعديل: نستخدم id المالك الذي نقوم بتعديله ***
+            stmt.setInt(5, ownerToEdit.getId()); 
+            
+            stmt.executeUpdate();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showAlert("Database Error", "Failed to update owner.");
+        }
+    }
+
+    private void addNewOwner(String name, String email, String phone, String address) {
+        // ملاحظة: هذا الاستعلام يفترض عدم إدخال كلمة المرور من هذه الشاشة
+        String sql = "INSERT INTO owners (name, email, phone, address) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, name);
+            stmt.setString(2, email);
+            stmt.setString(3, phone);
+            stmt.setString(4, address);
+
+            stmt.executeUpdate();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showAlert("Database Error", "Failed to add new owner.");
+        }
     }
 
     @FXML
     private void handleCancel() {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        closeWindow();
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) addLandlordButton.getScene().getWindow();
         stage.close();
+    }
+    
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

@@ -68,6 +68,7 @@ public void loadTenantData(Tenant tenant) {
     // paymentData.addAll(database.getPaymentsForTenant(tenant.getId()));
 }
 
+
     private void refreshView() {
         // ... (دالة تحديث الليبلات تبقى كما هي)
         tenantNameHeaderLabel.setText(currentTenant.getName());
@@ -79,35 +80,44 @@ public void loadTenantData(Tenant tenant) {
     }
 
 
-    @FXML
-    private void handleRecordPaymentButton(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("RecordPaymentView.fxml"));
-            Parent root = loader.load();
+   @FXML
+private void handleRecordPaymentButton(ActionEvent event) {
+    try {
+        // تحميل واجهة تسجيل الدفعة
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RecordPaymentView.fxml"));
+        Parent root = loader.load();
+        RecordPaymentController paymentController = loader.getController();
 
-            RecordPaymentController paymentController = loader.getController();
+        // إنشاء وعرض النافذة
+        Stage stage = new Stage();
+        stage.setTitle("Record Payment for " + currentTenant.getName());
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
 
-            Stage stage = new Stage();
-            stage.setTitle("Record a New Payment for " + currentTenant.getName());
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-
-            // === هنا السحر ===
-            // بعد إغلاق النافذة، نحصل على الدفعة الجديدة
-            Payment newPayment = paymentController.getNewPayment();
-
-            // إذا قام المستخدم بالحفظ (newPayment لن تكون null)
-            if (newPayment != null) {
-                // أضف الدفعة الجديدة إلى القائمة، والجدول سيتحدث تلقائيًا
-                paymentData.add(newPayment);
-                System.out.println("Payment was saved. Table updated.");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        // الحصول على الدفعة الجديدة بعد إغلاق النافذة
+        Payment newPayment = paymentController.getNewPayment();
+        if (newPayment != null) {
+            // إضافة الدفعة إلى الجدول
+            paymentData.add(newPayment);
+            
+            // إظهار رسالة نجاح
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Payment Recorded");
+            alert.setHeaderText("Payment Added Successfully");
+            alert.setContentText("Payment has been recorded for " + currentTenant.getName());
+            alert.showAndWait();
         }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Cannot open payment form");
+        alert.setContentText("Failed to load the payment recording form.");
+        alert.showAndWait();
     }
+}
     
     
     
@@ -194,31 +204,54 @@ private void handleTerminateContractButton(ActionEvent event) {
 }
 
 @FXML
-    private void handleEditTenantButton(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddTenantView.fxml"));
-            Parent root = loader.load();
-            AddTenantController editController = loader.getController();
-            editController.loadTenantForEditing(this.currentTenant);
-            Stage stage = new Stage();
-            stage.setTitle("Edit Tenant Info");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-            Tenant updatedTenant = editController.getEditedTenant();
-            if (updatedTenant != null) {
-                this.currentTenant.setName(updatedTenant.getName());
-                this.currentTenant.setEmail(updatedTenant.getEmail());
-                this.currentTenant.setPhone(updatedTenant.getPhone());
-                this.currentTenant.setOccupation(updatedTenant.getOccupation());
-                this.currentTenant.setAddress(updatedTenant.getAddress());
-                refreshView();
-                this.tenantUpdated = true;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+private void handleEditTenantButton(ActionEvent event) {
+    try {
+        // تحميل واجهة تعديل المستأجر
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddTenantView.fxml"));
+        Parent root = loader.load();
+        AddTenantController editController = loader.getController();
+        
+        // تحميل البيانات الحالية للتعديل
+        editController.loadTenantForEditing(this.currentTenant);
+
+        // إنشاء وعرض النافذة
+        Stage stage = new Stage();
+        stage.setTitle("Edit Tenant: " + currentTenant.getName());
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+        // الحصول على البيانات المحدثة
+        Tenant updatedTenant = editController.getEditedTenant();
+        if (updatedTenant != null) {
+            // تحديث البيانات الحالية
+            this.currentTenant.setName(updatedTenant.getName());
+            this.currentTenant.setEmail(updatedTenant.getEmail());
+            this.currentTenant.setPhone(updatedTenant.getPhone());
+            this.currentTenant.setOccupation(updatedTenant.getOccupation());
+            this.currentTenant.setAddress(updatedTenant.getAddress());
+            
+            // إعادة رسم الواجهة
+            refreshView();
+            this.tenantUpdated = true;
+            
+            // إظهار رسالة نجاح
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Tenant Updated");
+            alert.setHeaderText("Information Updated Successfully");
+            alert.setContentText("Tenant information has been updated.");
+            alert.showAndWait();
         }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Cannot open edit form");
+        alert.setContentText("Failed to load the tenant editing form.");
+        alert.showAndWait();
     }
+}
 }
 
 

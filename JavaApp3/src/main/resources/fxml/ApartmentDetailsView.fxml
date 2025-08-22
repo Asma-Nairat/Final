@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="600.0" prefWidth="900.0"stylesheets="@/fxml/tenants-style.css"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.ApartmentDetailsController">
+<BorderPane prefHeight="600.0" prefWidth="900.0" stylesheets="@/fxml/tenants-style.css"  xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.ApartmentDetailsController">
    <center>
       <VBox style="-fx-background-color: #f4f4f4;" BorderPane.alignment="CENTER">
          <children>

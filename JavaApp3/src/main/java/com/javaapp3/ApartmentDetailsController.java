@@ -1,23 +1,27 @@
 package com.javaapp3;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.stage.Modality;
-import java.io.IOException;
+import javafx.stage.Stage;
 
 public class ApartmentDetailsController implements Initializable {
 
+    // --- الربط مع عناصر الواجهة ---
     @FXML private Button deleteButton;
     @FXML private Button editDetailsButton;
     @FXML private Label apartmentNameHeaderLabel;
@@ -27,15 +31,17 @@ public class ApartmentDetailsController implements Initializable {
     @FXML private Label ownerNameLabel;
     @FXML private Label statusLabel;
     
-    private boolean editRequested = false;
-    private boolean apartmentDeleted = false;
-    private int currentApartmentId = -1;
+    // --- متغيرات لتتبع حالة النافذة ---
+    private boolean editRequested = false;      // تصبح true إذا تم تعديل الشقة بنجاح
+    private boolean apartmentDeleted = false;   // تصبح true إذا تم حذف الشقة بنجاح
+    private int currentApartmentId = -1;      // لتخزين ID الشقة المعروضة حالياً
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // يمكن ترك هذا فارغاً حالياً
+        // لا نحتاج لشيء هنا حالياً، لأن تحميل البيانات يتم عبر دالة loadApartmentData
     }
     
+    // --- دوال Getters لإعلام النافذة الرئيسية بالتغييرات ---
     public boolean isEditRequested() {
         return editRequested;
     }
@@ -45,213 +51,178 @@ public class ApartmentDetailsController implements Initializable {
     }
     
     /**
-     * دالة لتحميل بيانات الشقة من قاعدة البيانات وعرضها
+     * دالة أساسية لتحميل بيانات الشقة من قاعدة البيانات وعرضها في الواجهة.
+     * يتم استدعاؤها من ApartmentsViewController عند الضغط على زر "View".
+     * @param apartmentId الـ ID الخاص بالشقة المطلوب عرضها
      */
     public void loadApartmentData(int apartmentId) {
         this.currentApartmentId = apartmentId;
         
-        try (java.sql.Connection conn = DatabaseConfig.getConnection()) {
-            // جلب بيانات الشقة مع بيانات المالك
+        // التحقق من أن الـ ID صالح
+        if (apartmentId <= 0) {
+            System.err.println("Invalid Apartment ID received: " + apartmentId);
+            showAlert("Error", "Invalid Data", "Could not load apartment details due to an invalid ID.");
+            return;
+        }
+
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            // استعلام SQL لجلب كل تفاصيل الشقة مع اسم وبيانات التواصل الخاصة بالمالك
             String sql = """
                 SELECT a.id, a.name, a.type, a.town, a.location, a.description, a.status,
                        o.name as owner_name, o.phone as owner_phone, o.email as owner_email
                 FROM apartments a
-                JOIN owners o ON a.owner_id = o.id
+                LEFT JOIN owners o ON a.owner_id = o.id
                 WHERE a.id = ?
             """;
             
-            try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setInt(1, apartmentId);
-                java.sql.ResultSet rs = stmt.executeQuery();
+                ResultSet rs = stmt.executeQuery();
                 
                 if (rs.next()) {
-                    // تحديث عناصر الواجهة
+                    // إذا وجدنا الشقة، نقوم بتعبئة الحقول في الواجهة
                     String apartmentName = rs.getString("name");
                     apartmentNameHeaderLabel.setText(apartmentName);
                     apartmentNameLabel.setText(apartmentName);
                     
                     String description = rs.getString("description");
-                    descriptionLabel.setText(description != null && !description.isEmpty() ? description : "لا يوجد وصف");
+                    descriptionLabel.setText(description != null && !description.isEmpty() ? description : "No description provided.");
                     
-                    ownerNameLabel.setText(rs.getString("owner_name"));
+                    ownerNameLabel.setText(rs.getString("owner_name") != null ? rs.getString("owner_name") : "N/A");
                     
                     String ownerPhone = rs.getString("owner_phone");
                     String ownerEmail = rs.getString("owner_email");
-                    String contactInfo = ownerPhone;
+                    String contactInfo = ownerPhone != null ? ownerPhone : "";
                     if (ownerEmail != null && !ownerEmail.isEmpty()) {
-                        contactInfo += " | " + ownerEmail;
+                        contactInfo += (contactInfo.isEmpty() ? "" : " | ") + ownerEmail;
                     }
-                    ownerContactLabel.setText(contactInfo);
+                    ownerContactLabel.setText(contactInfo.isEmpty() ? "N/A" : contactInfo);
                     
                     String status = rs.getString("status");
-                    statusLabel.setText("● " + (status != null ? status : "Available"));
+                    statusLabel.setText("● " + (status != null ? status : "N/A"));
                     if ("Available".equals(status)) {
                         statusLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
                     } else {
-                        statusLabel.setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
+                        statusLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
                     }
                 } else {
                     System.err.println("Apartment not found with ID: " + apartmentId);
+                    showAlert("Not Found", "Apartment Not Found", "The selected apartment could not be found in the database.");
                 }
             }
         } catch (Exception e) {
             System.err.println("Error loading apartment data: " + e.getMessage());
             e.printStackTrace();
+            showAlert("Database Error", "Loading Failed", "An error occurred while fetching apartment details.");
         }
     }
 
+    /**
+     * دالة تعمل عند الضغط على زر "Edit".
+     * تفتح نافذة التعديل (AddApartmentView.fxml) وتمرر لها ID الشقة الحالية.
+     */
     @FXML
     private void handleEditDetailsButton(ActionEvent event) {
-        System.out.println("Edit button clicked for apartment ID: " + currentApartmentId);
-        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddApartmentView.fxml"));
             Parent root = loader.load();
             AddApartmentController editController = loader.getController();
             
-            // تحميل البيانات الحالية للتعديل
-            loadApartmentForEditing(editController);
+            // نمرر ID الشقة الحالية إلى كنترولر التعديل
+            editController.loadApartmentForEditing(this.currentApartmentId);
             
             Stage stage = new Stage();
             stage.setTitle("Edit Apartment Details");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
+            stage.showAndWait(); // الانتظار حتى يغلق المستخدم نافذة التعديل
             
-            // التحقق من حفظ التعديلات
+            // بعد إغلاق نافذة التعديل، نتحقق إذا تم الحفظ
             if (editController.isSaved()) {
-                this.editRequested = true;
-                // إعادة تحميل البيانات المحدثة
-                loadApartmentData(currentApartmentId);
-                
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Success");
-                alert.setHeaderText(null);
-                alert.setContentText("Apartment details updated successfully!");
-                alert.showAndWait();
+                this.editRequested = true; // نعلم النافذة الرئيسية بوجود تعديل
+                loadApartmentData(this.currentApartmentId); // نعيد تحميل البيانات المحدثة في هذه النافذة
             }
-            
         } catch (IOException e) {
             e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Cannot open edit window");
-            alert.setContentText("Failed to load the edit apartment form.");
-            alert.showAndWait();
-        }
-    }
-    
-    private void loadApartmentForEditing(AddApartmentController editController) {
-        try (java.sql.Connection conn = DatabaseConfig.getConnection()) {
-            String sql = """
-                SELECT a.name, a.type, a.town, a.location, a.description,
-                       o.name as owner_name
-                FROM apartments a
-                JOIN owners o ON a.owner_id = o.id
-                WHERE a.id = ?
-            """;
-            
-            try (java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, currentApartmentId);
-                java.sql.ResultSet rs = stmt.executeQuery();
-                
-                if (rs.next()) {
-                    editController.loadApartmentForEditing(
-                        rs.getString("name"),
-                        rs.getString("type"),
-                        rs.getString("owner_name"),
-                        rs.getString("town"),
-                        rs.getString("location"),
-                        rs.getString("description")
-                    );
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Error loading apartment for editing: " + e.getMessage());
+            showAlert("Error", "Cannot Open Window", "Failed to load the edit apartment form.");
         }
     }
 
+    /**
+     * دالة تعمل عند الضغط على زر "Delete".
+     * تعرض رسالة تأكيد، وإذا وافق المستخدم، تقوم بحذف الشقة من قاعدة البيانات.
+     */
     @FXML
     private void handleDeleteButton(ActionEvent event) {
-        System.out.println("Delete button clicked for apartment ID: " + currentApartmentId);
-
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Confirm Deletion");
         confirmationAlert.setHeaderText("Are you sure you want to delete this apartment?");
-        confirmationAlert.setContentText("This action cannot be undone. All related data will be removed.");
+        confirmationAlert.setContentText("This action cannot be undone. All related data will also be removed.");
 
+        // عرض نافذة التأكيد وانتظار رد المستخدم
         confirmationAlert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
+                // إذا ضغط المستخدم "OK"، ننفذ الحذف
                 if (deleteApartmentFromDatabase()) {
-                    this.apartmentDeleted = true;
+                    this.apartmentDeleted = true; // نعلم النافذة الرئيسية بوجود حذف
                     
-                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                    successAlert.setTitle("Success");
-                    successAlert.setHeaderText(null);
-                    successAlert.setContentText("Apartment deleted successfully!");
-                    successAlert.showAndWait();
-                    
-                    // إغلاق نافذة التفاصيل
+                    // إغلاق نافذة التفاصيل بعد الحذف الناجح
                     Stage stage = (Stage) deleteButton.getScene().getWindow();
                     stage.close();
                 } else {
-                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                    errorAlert.setTitle("Error");
-                    errorAlert.setHeaderText("Failed to delete apartment");
-                    errorAlert.setContentText("The apartment may be in use or there was a database error.");
-                    errorAlert.showAndWait();
+                    showAlert("Error", "Deletion Failed", "The apartment could not be deleted due to a database error.");
                 }
             }
         });
     }
     
+    /**
+     * دالة مساعدة لتنفيذ عملية الحذف في قاعدة البيانات.
+     * @return true إذا نجح الحذف, false إذا فشل.
+     */
     private boolean deleteApartmentFromDatabase() {
-        try (java.sql.Connection conn = DatabaseConfig.getConnection()) {
-            // بداية المعاملة
-            conn.setAutoCommit(false);
-            
+        try (Connection conn = DatabaseConfig.getConnection()) {
+            conn.setAutoCommit(false); // بداية المعاملة لضمان تنفيذ كل شيء أو لا شيء
             try {
-                // حذف الطلبات المرتبطة أولاً (إذا وجدت)
-                String deleteMaintenanceSql = "DELETE FROM maintenance_requests WHERE apartment_id = ?";
-                try (java.sql.PreparedStatement stmt = conn.prepareStatement(deleteMaintenanceSql)) {
-                    stmt.setInt(1, currentApartmentId);
-                    stmt.executeUpdate();
-                }
+                // حذف البيانات المرتبطة أولاً لمنع أخطاء Foreign Key
+                String[] deleteSqls = {
+                    "DELETE FROM maintenance_requests WHERE apartment_id = ?",
+                    "DELETE FROM payments WHERE apartment_id = ?",
+                    "DELETE FROM apartments WHERE id = ?"
+                };
                 
-                // حذف المدفوعات المرتبطة
-                String deletePaymentsSql = "DELETE FROM payments WHERE apartment_id = ?";
-                try (java.sql.PreparedStatement stmt = conn.prepareStatement(deletePaymentsSql)) {
-                    stmt.setInt(1, currentApartmentId);
-                    stmt.executeUpdate();
-                }
-                
-                // حذف الشقة
-                String deleteApartmentSql = "DELETE FROM apartments WHERE id = ?";
-                try (java.sql.PreparedStatement stmt = conn.prepareStatement(deleteApartmentSql)) {
-                    stmt.setInt(1, currentApartmentId);
-                    int affectedRows = stmt.executeUpdate();
-                    
-                    if (affectedRows > 0) {
-                        conn.commit();
-                        System.out.println("Apartment " + currentApartmentId + " deleted successfully.");
-                        return true;
-                    } else {
-                        conn.rollback();
-                        return false;
+                for (String sql : deleteSqls) {
+                    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                        stmt.setInt(1, this.currentApartmentId);
+                        stmt.executeUpdate();
                     }
                 }
                 
+                conn.commit(); // تأكيد تنفيذ كل عمليات الحذف
+                System.out.println("Apartment " + currentApartmentId + " and related data deleted successfully.");
+                return true;
+                
             } catch (Exception e) {
-                conn.rollback();
-                throw e;
+                conn.rollback(); // إذا حدث خطأ، تراجع عن كل التغييرات
+                throw e; // إلقاء الاستثناء لمعالجته في الأعلى
             } finally {
-                conn.setAutoCommit(true);
+                conn.setAutoCommit(true); // إعادة الوضع الافتراضي
             }
-            
         } catch (Exception e) {
-            System.err.println("Error deleting apartment: " + e.getMessage());
+            System.err.println("Error during apartment deletion transaction: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
+    }
+    
+    /**
+     * دالة مساعدة لعرض رسائل التنبيه.
+     */
+    private void showAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

@@ -1,15 +1,20 @@
 package com.javaapp3; 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class RecordPaymentController implements Initializable {
@@ -19,6 +24,7 @@ public class RecordPaymentController implements Initializable {
     @FXML private TextArea notesArea;
     
     private Payment newPayment = null; // متغير لتخزين الدفعة الجديدة
+    private Object paymentsTable;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -74,4 +80,7 @@ this.newPayment = new Payment(formattedDate, formattedAmount, monthYear);
     public Payment getNewPayment() {
         return newPayment;
     }
+ 
+
+   
 }

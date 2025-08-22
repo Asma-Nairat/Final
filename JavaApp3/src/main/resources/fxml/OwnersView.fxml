@@ -41,12 +41,14 @@
                <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
                <children>
                   <Label text="Registered Owners" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-                  <TableView fx:id="ownersTable" VBox.vgrow="ALWAYS">
+                                    <TableView fx:id="ownersTable" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn text="OWNER NAME" />
-                      <TableColumn text="PHONE" />
-                      <TableColumn text="EMAIL" />
-                      <TableColumn text=" " />
+                      <!--  التصحيح: إضافة fx:id المطابق لأسماء المتغيرات في الكنترولر -->
+                      <TableColumn fx:id="nameColumn" prefWidth="250.0" text="OWNER NAME" />
+                      <TableColumn fx:id="phoneColumn" prefWidth="150.0" text="PHONE" />
+                      <TableColumn fx:id="emailColumn" prefWidth="250.0" text="EMAIL" />
+                      <TableColumn fx:id="addressColumn" prefWidth="300.0" text="ADDRESS" />
+                      <TableColumn fx:id="actionsColumn" prefWidth="200.0" text="ACTIONS" />
                     </columns>
                      <VBox.margin><Insets top="20.0" /></VBox.margin>
                   </TableView>

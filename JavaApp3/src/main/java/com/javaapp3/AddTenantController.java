@@ -71,10 +71,19 @@ public class AddTenantController implements Initializable {
         }
     }
     
-    public void loadTenantForEditing(Tenant tenant) {
-        // ... (الكود يبقى كما هو)
-    }
-
+   public void loadTenantForEditing(Tenant tenant) {
+    if (tenant == null) return;
+    
+    // تعبئة الحقول بالبيانات الحالية
+    fullNameField.setText(tenant.getName());
+    emailField.setText(tenant.getEmail());
+    phoneField.setText(tenant.getPhone());
+    occupationField.setText(tenant.getOccupation());
+    addressArea.setText(tenant.getAddress());
+    
+    // تغيير نص الزر
+    addButton.setText("Save Changes");
+}
     /**
      * دالة للسماح للواجهة السابقة بالحصول على المستأجر الذي تم إنشاؤه.
      * @return كائن المستأجر، أو null إذا تم الإلغاء.
@@ -84,7 +93,11 @@ public class AddTenantController implements Initializable {
         return resultTenant;
     }
 
-    private void showAlert(String title, String message, Alert.AlertType alertType) {
-        // ... (الكود يبقى كما هو)
-    }
+   private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null); // لا نريد عنواناً رأسياً للرسالة
+        alert.setContentText(message);
+        alert.showAndWait();
+    } 
 }

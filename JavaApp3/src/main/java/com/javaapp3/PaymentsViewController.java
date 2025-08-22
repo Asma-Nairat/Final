@@ -22,11 +22,11 @@ import javafx.stage.Stage;
  */
 public class PaymentsViewController implements Initializable {
 
-    @FXML
-    private void handleAddPaymentButton() {
-        // TODO: Implement payment addition logic
-        System.out.println("Add Payment button clicked.");
-    }
+  @FXML
+private void handleAddPaymentButton(ActionEvent event) {
+    // استدعاء نفس الدالة الرئيسية
+    handleAddPayment(event);
+}
 
     // الربط مع زر "Pay Rent"
     @FXML
@@ -312,13 +312,67 @@ private void openInvoiceView(int paymentId) {
     }
 }
 
+
 @FXML
-private void handleAddPayment(ActionEvent event) throws IOException {
-    openModalWindow("/fxml/PayRentView.fxml", "Add New Payment");
-    // إعادة تحميل البيانات
-    loadPaymentsFromDatabase();
-    paymentsTable.setItems(paymentData);
+private void handleAddPayment(ActionEvent event) {
+    System.out.println("Add Payment button clicked - attempting to open PayRentView");
+    
+    try {
+        // التحقق من وجود الملف أولاً
+        java.net.URL fxmlUrl = getClass().getResource("/fxml/PayRentView.fxml");
+        if (fxmlUrl == null) {
+            System.err.println("FXML file not found: /fxml/PayRentView.fxml");
+            
+            // جرب مسار بديل
+            fxmlUrl = getClass().getResource("/fxml/RecordPaymentView.fxml");
+            if (fxmlUrl == null) {
+                System.err.println("Alternative FXML file not found: /fxml/RecordPaymentView.fxml");
+                showErrorAlert("FXML File Missing", "Payment form files are missing from the project.");
+                return;
+            }
+            System.out.println("Using alternative file: RecordPaymentView.fxml");
+        }
+        
+        // تحميل الواجهة
+        FXMLLoader loader = new FXMLLoader(fxmlUrl);
+        Parent root = loader.load();
+        
+        System.out.println("FXML loaded successfully");
+        
+        // إنشاء وعرض النافذة
+        Stage stage = new Stage();
+        stage.setTitle("Add New Payment");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        
+        System.out.println("About to show payment window");
+        stage.showAndWait();
+        System.out.println("Payment window closed");
+        
+        // إعادة تحميل البيانات
+        loadPaymentsFromDatabase();
+        paymentsTable.setItems(paymentData);
+        
+        System.out.println("Payment data refreshed successfully");
+        
+    } catch (IOException e) {
+        System.err.println("IOException in handleAddPayment: " + e.getMessage());
+        e.printStackTrace();
+        showErrorAlert("Loading Error", "Failed to load the payment form: " + e.getMessage());
+    } catch (Exception e) {
+        System.err.println("Unexpected error in handleAddPayment: " + e.getMessage());
+        e.printStackTrace();
+        showErrorAlert("Unexpected Error", "An unexpected error occurred: " + e.getMessage());
+    }
 }
+private void showErrorAlert(String title, String message) {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error");
+    alert.setHeaderText(title);
+    alert.setContentText(message);
+    alert.showAndWait();
+}
+
 
 // باقي الدوال تبقى كما هي...  
     

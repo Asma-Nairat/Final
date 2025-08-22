@@ -5,23 +5,26 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<VBox prefWidth="800.0" spacing="20.0" stylesheets="@/fxml/tenants-style.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.PayRentController">
+<?import javafx.scene.layout.VBox?>
+
+<!-- 
+    تأكدي من أن اسم الكنترولر هنا مطابق لاسم الكلاس عندك
+-->
+<VBox prefWidth="800.0" spacing="20.0" stylesheets="@/fxml/tenants-style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaapp3.PayRentController">
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
    </padding>
    <children>
-      <!-- الجزء العلوي: البحث عن الشقة -->
+      <!-- الجزء العلوي: اختيار الشقة -->
       <HBox alignment="CENTER_LEFT" spacing="10.0">
          <children>
-            <Label styleClass="form-label" text="Search by Apartment ID:" />
-            <TextField fx:id="searchApartmentIdField" prefWidth="150.0" promptText="Enter Apartment ID" />
-            <Button fx:id="searchButton" text="Search" />
+            <Label styleClass="form-label" text="Select Rented Apartment:" />
+            <!-- التصحيح: إضافة fx:id للقائمة المنسدلة -->
+            <ComboBox fx:id="apartmentComboBox" prefWidth="300.0" promptText="Choose an apartment" />
          </children>
       </HBox>
       <Separator />
@@ -30,7 +33,7 @@
       <GridPane hgap="20.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="350.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="350.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
@@ -58,7 +61,7 @@
                         <Label text="Total Rent to Pay:" style="-fx-font-weight: bold;" GridPane.rowIndex="2" />
                         <Label fx:id="rentPerMonthLabel" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" />
                         <Label fx:id="totalMonthsLabel" text="-" style="-fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label fx:id="totalRentLabel" text="=" style="-fx-font-size: 16px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="totalRentLabel" text="-" style="-fx-font-size: 16px; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </children>
@@ -71,14 +74,14 @@
                   <GridPane hgap="10.0" vgap="5.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" />
                       <RowConstraints minHeight="10.0" />
                       <RowConstraints minHeight="10.0" />
-                        <RowConstraints minHeight="10.0" />
-                        <RowConstraints minHeight="10.0" />
+                      <RowConstraints minHeight="10.0" />
+                      <RowConstraints minHeight="10.0" />
                     </rowConstraints>
                      <children>
                         <Label text="Full name" />
@@ -101,8 +104,9 @@
       <!-- الجزء السفلي: أزرار التحكم -->
       <HBox alignment="CENTER_RIGHT" spacing="10.0">
          <children>
-            <Button styleClass="cancel-button" text="Cancel" />
-            <Button styleClass="add-button" text="Confirm Payment" />
+            <!-- التصحيح: إضافة fx:id للأزرار -->
+            <Button fx:id="cancelButton" styleClass="cancel-button" text="Cancel" />
+            <Button fx:id="confirmPaymentButton" styleClass="add-button" text="Confirm Payment" />
          </children>
          <padding>
             <Insets top="20.0" />
